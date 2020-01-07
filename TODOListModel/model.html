@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>範本</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+
+<div class="top">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="index.html">首頁</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="OOXX.html">遊戲 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="model.html">ToDoList樣板 <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="YTAPI.html">YouTubeApi <span class="sr-only">(current)</span></a>
+        </li>
+       
+      </ul>
+    </div>
+  </nav>
+      
+  </div>
+
+<!--內容-->
+
+<div class="main">
+	<div class="container">
+		<div class="row text-center">
+      <div class="col">
+       
+        <h1>TODOList樣本</h1>
+        <div class="input-group mb-3">
+          <input type="text" id="content" class="form-control" placeholder="輸入字串">
+          <button id="submit" class="btn btn btn-light">輸入</button>    
+        </div>
+   
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>notes</th>
+            <th>action</th>
+          </tr>
+        </thead>
+        <tbody id="tb">
+          
+        
+
+        </tbody>
+
+        
+
+      </table>
+      </div>
+		
+
+		</div>
+	</div>
+
+
+</div>
+
+
+
+
+<script>
+  $(document).ready(function(){
+    var count = 3;
+    
+    $("#submit").click(function(){
+      
+     
+      var text = $('#content').val();
+      if(text!="")
+      {
+        count++;
+      
+
+      var row='<tr> \
+     <td>'+count+'</td> \
+     <td>'+text+'</td> \
+     <td><button class="edit btn btn-info">編輯</button><button class="delete btn btn-danger">刪除</button></td>   \
+     </tr>';
+     $(row).hide().appendTo('#tb').fadeIn();
+
+     $('.delete').off('click');
+      ajaxOK();
+      }
+      else{
+        alert('請輸入字串');
+      }
+    })
+ 
+    var id , note;
+  $.ajax({
+    url:'data.xml',
+    type:'get',
+    dataType:'xml',
+    timeout:1000
+  }).done(function(xml){
+    $(xml).find("td").each(function(i){
+     var id=$(this).children("id").text();
+     var note=$(this).children("note").text();
+     $('#tb').append('<tr> \
+     <td>'+id+'</td> \
+     <td>'+note+'</td> \
+     <td><button class="edit btn btn-info">編輯</button><button class="delete btn btn-danger">刪除</button></td>   \
+     </tr>');
+
+     
+     
+ 
+    })
+   
+    ajaxOK();
+  })
+
+  function ajaxOK(){
+  $('.edit').click(function(){
+    alert('編輯');
+  })
+  $('.delete').click(function(){
+    var c = confirm("你確定要刪除嗎?");
+    if(c)
+    {
+      alert('刪除');
+      $(this).parent().parent().fadeOut();
+    }
+   
+  })
+  }
+
+
+
+
+  })
+
+
+
+
+  
+</script>
+</body>
+</html>
